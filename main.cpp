@@ -18,7 +18,7 @@ void periodicThread(unsigned int periodo, unsigned int cargaCPU)
     sigset_t alarm_sig; //The sigset_t data type is used to represent a signal set
 
     sched_param parametro;
-	sched_getparam(0, &parametro); //Prioridade recebida
+    sched_getparam(0, &parametro); //Prioridade recebida
     std::cout<< "Prioridade da Thread: " << parametro.sched_priority << std::endl;
 
     return;
@@ -27,15 +27,15 @@ void periodicThread(unsigned int periodo, unsigned int cargaCPU)
 int main()
 {          
     unsigned int periodo = 500; //Periodo da thread periodica
-	unsigned int cargaCPU = 100000; //Carga da CPU
+    unsigned int cargaCPU = 100000; //Carga da CPU
 
     // Sinal que sera enviado do timer Posix para implementar comportamento periodico da thread
     // SIGALRM: Alarm clock.
     sigset_t alarm_sig;
-	sigemptyset(&alarm_sig); //Initialize a set to contain no signals
-	sigaddset(&alarm_sig, SIGALRM); //Add a signal to a set
-	sigprocmask(SIG_BLOCK, &alarm_sig, NULL);//Add the signals pointed to by set to the thread mask.
-    
+    sigemptyset(&alarm_sig); //Initialize a set to contain no signals
+    sigaddset(&alarm_sig, SIGALRM); //Add a signal to a set
+    sigprocmask(SIG_BLOCK, &alarm_sig, NULL);//Add the signals pointed to by set to the thread mask.
+
     sched_param sch; //objeto que ira definir o grau de prioridade para thread 
     int policy; // location where the function can store the scheduling policy
     std::thread threadPeriodica(periodicThread, periodo, cargaCPU);  //criando thread 
