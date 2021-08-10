@@ -11,19 +11,17 @@
 #include <chrono>
 #include <cstring>
 #include <pthread.h>
-#include <signal.h>
- 
-std::mutex iomutex;
-void f(int num)
+#include <signal.h> 
+
+void periodicThread(unsigned int periodo, unsigned int cargaCPU)
 {
-    std::this_thread::sleep_for(std::chrono::seconds(1));
- 
-    sched_param sch;
-    int policy; 
-    pthread_getschedparam(pthread_self(), &policy, &sch);
-    std::lock_guard<std::mutex> lk(iomutex);
-    std::cout << "Thread " << num << " is executing at priority "
-              << sch.sched_priority << '\n';
+    sigset_t alarm_sig; //The sigset_t data type is used to represent a signal set
+
+    sched_param parametro;
+	sched_getparam(0, &parametro); //Prioridade recebida
+    std::cout<< "Prioridade da Thread: " << parametro.sched_priority << std::endl;
+
+    return;
 }
  
 int main()
@@ -40,14 +38,14 @@ int main()
     
     sched_param sch; //objeto que ira definir o grau de prioridade para thread 
     int policy; // location where the function can store the scheduling policy
-    std::thread t1(f, 1);  //criando thread 
-    pthread_getschedparam(t1.native_handle(), &policy, &sch); //Ref.: http://www.qnx.com/developers/docs/6.5.0SP1.update/com.qnx.doc.neutrino_lib_ref/p/pthread_getschedparam.html
-    sch.sched_priority = 60; //prioridade de 1 a 99
+    std::thread threadPeriodica(periodicThread, periodo, cargaCPU);  //criando thread 
+    pthread_getschedparam(threadPeriodica.native_handle(), &policy, &sch); //Ref.: http://www.qnx.com/developers/docs/6.5.0SP1.update/com.qnx.doc.neutrino_lib_ref/p/pthread_getschedparam.html
+    sch.sched_priority = 55; //prioridade de 1 a 99
     
     //Estabelencendo politica de escalonamento para a thread para SCHED_FIFO
-    if (pthread_setschedparam(t1.native_handle(), SCHED_FIFO, &sch)) {
+    if (pthread_setschedparam(threadPeriodica.native_handle(), SCHED_FIFO, &sch)) {
         std::cout << "Falha ao setar politica de escalonamento: " << std::strerror(errno) << '\n';
     }
  
-    t1.join();
+    threadPeriodica.join();
 }
