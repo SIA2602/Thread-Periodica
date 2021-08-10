@@ -40,7 +40,7 @@ int main()
     int policy; // location where the function can store the scheduling policy
     std::thread threadPeriodica(periodicThread, periodo, cargaCPU);  //criando thread 
     pthread_getschedparam(threadPeriodica.native_handle(), &policy, &sch); //Ref.: http://www.qnx.com/developers/docs/6.5.0SP1.update/com.qnx.doc.neutrino_lib_ref/p/pthread_getschedparam.html
-    sch.sched_priority = 55; //prioridade de 1 a 99
+    sch.sched_priority = 25; //prioridade de 1 a 99
     
     //Estabelencendo politica de escalonamento para a thread para SCHED_FIFO
     if (pthread_setschedparam(threadPeriodica.native_handle(), SCHED_FIFO, &sch)) {
