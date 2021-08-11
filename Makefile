@@ -1,7 +1,7 @@
 CFLAGS = -Wall -g -lpthread -lrt
 PROGS = main
 
-g++: main.cpp
+g++: main.cpp thread.h thread.cpp
 	$@ $^ -o $(PROGS) $(CFLAGS)
 
 clean:
