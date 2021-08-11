@@ -10,7 +10,7 @@ Trabalho Pratico 1 relativo a Thread Periódica para a disciplina de Sistemas de
 
 ## Instrucoes
 - Para compilar o programa basta digitar no terminal linux: make
-- Para executar: sudo ./main periodo cargaCPU prioridade <br><br>
+- Para executar: sudo taskset -c 1 ./main periodo cargaCPU prioridade <br><br>
 onde:<br>
     <b>periodo</b> eh o valor em ms<br>
     <b>cargaCPU</b> eh o fator de carga<br>
